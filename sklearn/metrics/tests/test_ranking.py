@@ -1842,6 +1842,16 @@ def test_ndcg_score():
     y_true, y_score = np.random.RandomState(0).random_sample((2, 100, 10))
     _test_ndcg_score_for(y_true, y_score)
 
+def test_ndcg_error_single_document():
+    """Check that we raise an informative error message when trying to
+    compute NDCG with a single document."""
+    err_msg = (
+        "Computing NDCG is only meaningful when the list of documents is greater than 1. "
+        "In this context, it means y_true has more than one column."
+        "Got 1 instead."
+    )
+    with pytest.raises(ValueError, match=err_msg):
+        ndcg_score([[1]], [[1]])
 
 def _test_ndcg_score_for(y_true, y_score):
     ideal = _ndcg_sample_scores(y_true, y_true)
